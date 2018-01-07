@@ -119,7 +119,7 @@ class locales (
   $locales           = [ 'en_US.UTF-8 UTF-8', 'de_DE.UTF-8 UTF-8', ],
   $ensure            = 'present',
   $default_locale    = undef,
-  $language  = undef,
+  $language          = undef,
   $lc_ctype          = $locales::params::lc_ctype,
   $lc_collate        = $locales::params::lc_collate,
   $lc_time           = $locales::params::lc_time,
@@ -210,13 +210,15 @@ class locales (
 
   }
 
-  file { $default_file:
-    ensure  => $ensure,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template("${module_name}/locale.erb"),
-    require => $update_locale_require,
+  if $default_file {
+    file { $default_file:
+      ensure  => $ensure,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template("${module_name}/locale.erb"),
+      require => $update_locale_require,
+    }
   }
 
   if $update_locale_cmd {

@@ -53,17 +53,24 @@ class locales::params {
     }
     /(RedHat|CentOS)/ : {
       $package = 'glibc-common'
-      $local_gen_cmd = undef
-      $update_local_pkg = undef
-      #$config_file = '/etc/locale.gen'
+      $locale_gen_cmd = undef
       $update_locale_cmd = undef
       $config_file = '/var/lib/locales/supported.d/local'
       $update_locale_pkg = false
-      if $::operatingsystemmajrelease == '7' {
+      if ( $::operatingsystemmajrelease + 0 ) >= 7 {
         $default_file      = '/etc/locale.conf'
       } else {
         $default_file      = '/etc/sysconfig/i18n'
       }
+    }
+    /(Gentoo)/: {
+      $package = 'glibc'
+      $locale_gen_cmd = '/usr/sbin/locale-gen'
+      $config_file = '/etc/locale.gen'
+      $update_locale_pkg = false
+      $update_locale_cmd = 'eselect locale set'
+      #$default_file = '/etc/locale.gen'
+      $default_file = undef
     }
     default: {
       fail("Unsupported platform: ${::operatingsystem}")

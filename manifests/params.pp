@@ -55,9 +55,10 @@ class locales::params {
       $package = 'glibc-common'
       $locale_gen_cmd = undef
       $update_locale_cmd = undef
+      $supported_locales = undef
       $config_file = '/var/lib/locales/supported.d/local'
       $update_locale_pkg = false
-      if ( $::operatingsystemmajrelease + 0 ) >= 7 {
+      if ( Integer($::operatingsystemmajrelease) + 0 ) >= 7 {
         $default_file      = '/etc/locale.conf'
       } else {
         $default_file      = '/etc/sysconfig/i18n'
@@ -66,6 +67,7 @@ class locales::params {
     /(Gentoo)/: {
       $package = 'glibc'
       $locale_gen_cmd = '/usr/sbin/locale-gen'
+      $supported_locales = undef
       $config_file = '/etc/locale.gen'
       $update_locale_pkg = false
       $update_locale_cmd = 'eselect locale set'
